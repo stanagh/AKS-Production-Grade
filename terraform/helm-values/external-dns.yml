@@ -1,0 +1,28 @@
+provider:
+  name: azure
+
+azure:
+  resourceGroup: ${RESOURCE_GROUP_NAME}
+  tenantId: ${AZURE_TENANT_ID}
+  subscriptionId: ${AZURE_SUBSCRIPTION_ID}
+  useManagedIdentityExtension: true
+  clientId: ${EXTERNAL_DNS_CLIENT_ID}
+
+sources:
+  - ingress
+  - service
+
+domainFilters:
+  - attendanceappservice.online
+
+policy: sync
+
+txtOwnerId: aks-prod-uks-myapp
+
+podLabels:
+  azure.workload.identity/use: "true"
+
+serviceAccount:
+  create: false  
+  name: external-dns
+  namespace: external-dns

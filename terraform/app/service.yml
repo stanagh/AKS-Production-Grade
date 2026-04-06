@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: attendancecrm-service
+  namespace: attendance-crm
+  labels:
+    app: attendancecrm
+spec:
+  selector:
+    app: attendancecrm
+  ports:
+    - protocol: TCP
+      port: 80        # Service port
+      targetPort: 8080  # Container port

@@ -1,0 +1,20 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: ${EMAIL_ADDRESS}
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    solvers:
+    - dns01:
+        azureDNS:
+          subscriptionID: ${AZURE_SUBSCRIPTION_ID}
+          resourceGroupName: ${RESOURCE_GROUP_NAME}
+          hostedZoneName: ${HOSTED_ZONE_NAME}
+          environment: AzurePublicCloud
+          managedIdentity:
+            clientID: ${MANAGED_IDENTITY_CLIENT_ID}
+            tenantID: ${AZURE_TENANT_ID}

@@ -1,0 +1,8 @@
+installCRDs: true
+
+podLabels:
+  azure.workload.identity/use: "true"
+
+serviceAccount:
+  annotations:
+    azure.workload.identity/client-id: ${MANAGED_IDENTITY_CLIENT_ID}

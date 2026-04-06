@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: attendancecrm-ingress
+  namespace: attendance-crm
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: attendance.attendanceappservice.online
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: attendancecrm-service
+                port:
+                  number: 80
+  tls:
+    - secretName: attendance-tls
+      hosts:
+        - attendance.attendanceappservice.online

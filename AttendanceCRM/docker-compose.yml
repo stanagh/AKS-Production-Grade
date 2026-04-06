@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  attendance-crm:
+    build: .
+    ports:
+      - "5262:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__AttendanceCRM=data source=${DB_SERVER};initial catalog=${DB_DATABASE};user id=${DB_USER};password=${DB_PASSWORD};TrustServerCertificate=True;
+      - ASPNETCORE_URLS=http://+:80
+    depends_on:
+      - sql-server
+  sql-server:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      - SA_PASSWORD=${DB_PASSWORD}
+      - USERNAME=${DB_USER}
+      - DATABASE=${DB_DATABASE}
+      - ACCEPT_EULA=Y
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql-data:/var/opt/mssql
+volumes:          
+  sql-data:

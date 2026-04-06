@@ -27,7 +27,7 @@ stages:
           - task: UseDotNet@2
             inputs:
               packageType: sdk
-              version: 6.x
+              version: 8.x
 
           - script: dotnet test AttendanceCRM/AttendanceCRM.Test/AttendanceCRM.Test.csproj
             displayName: Run Unit Tests

@@ -1,0 +1,95 @@
+trigger:
+  paths:
+    include:
+      - AttendanceCRM/**
+
+pool: 
+  vmImage: 'ubuntu-latest'
+
+variables: 
+  - group: terraform-secrets
+  - name: RESOURCE_GROUP
+    value: 'rg-prod-uks-aks'
+  - name: AKS_CLUSTER_NAME
+    value: 'aks-produksaks'
+  - name: ACR_NAME
+    value: 'aks-prod-uks-myapp'
+  - name: IMAGE_NAME
+    value: attendancecrm
+  - name: IMAGE_TAG
+    value: '$(Build.BuildId)'
+
+stages:
+  - stage: Test
+    jobs:
+      - job: UnitTests
+        steps:
+          - task: UseDotNet@2
+            inputs:
+              packageType: sdk
+              version: 6.x
+
+          - script: dotnet test AttendanceCRM/AttendanceCRM.Test/AttendanceCRM.Test.csproj
+            displayName: Run Unit Tests
+
+  - stage: Build
+    dependsOn: Test
+    jobs:
+      - job: BuildAndPush
+        steps:
+          - task: AzureCLI@2
+            inputs:
+              azureSubscription: service-connection-subscription
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                az acr login --name $(ACR_NAME)
+                docker build -t $(ACR_NAME).azurecr.io/$(IMAGE_NAME):$(IMAGE_TAG) ./AttendanceCRM
+                docker push $(ACR_NAME).azurecr.io/$(IMAGE_NAME):$(IMAGE_TAG)
+            displayName: Build and Push to ACR
+
+  - stage: Deploy
+    dependsOn: Build
+    jobs:
+      - job: DeployToAKS
+        steps:
+          - task: AzureCLI@2
+            displayName: Deploy to AKS
+            inputs:
+              azureSubscription: service-connection-subscription
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                az aks get-credentials --resource-group $(RESOURCE_GROUP) --name $(AKS_CLUSTER_NAME)
+                kubectl set image deployment/attendancecrm-deployment attendancecrm=$(ACR_NAME).azurecr.io/$(IMAGE_NAME):$(IMAGE_TAG)
+                kubectl rollout status deployment/attendancecrm-deployment -n attendance-crm
+  
+  - stage: Review
+    dependsOn: Deploy
+    jobs:
+      - job: VerifyAKSDeployment
+        displayName: Verify Deployment
+        steps:
+          - script: |
+              kubectl get pods -n attendance-crm 
+              kubectl get svc -n attendance-crm
+              kubectl get ingress -n attendance-crm
+              kubectl get pods -n monitoring
+
+  - stage: Notify
+    dependsOn: Review
+    condition: always() 
+    jobs:
+      - job: SlackNotification
+        steps:
+          - script: |
+              STATUS="✅ Success"
+              if [ "$(Agent.JobStatus)" == "Failed" ]; then
+                STATUS="❌ Failed"
+              fi
+              curl -X POST $(SLACK_WEBHOOK_URL) \
+                -H 'Content-type: application/json' \
+                --data "{
+                  \"text\": \"*AttendanceCRM Deployment*\n Status: $STATUS\n Build: $(Build.BuildId)\n Branch: $(Build.SourceBranchName)\"
+                }"
+            displayName: Send Slack Notification

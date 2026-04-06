@@ -39,7 +39,7 @@ stages:
         steps:
           - task: AzureCLI@2
             inputs:
-              azureSubscription: service-connection-subscription
+              azureSubscription: service-connection-subscription-aks
               scriptType: bash
               scriptLocation: inlineScript
               inlineScript: |
@@ -56,7 +56,7 @@ stages:
           - task: AzureCLI@2
             displayName: Deploy to AKS
             inputs:
-              azureSubscription: service-connection-subscription
+              azureSubscription: service-connection-subscription-aks
               scriptType: bash
               scriptLocation: inlineScript
               inlineScript: |

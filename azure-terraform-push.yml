@@ -31,12 +31,7 @@ stages:
             displayName: Install Terraform
             inputs:
               terraformVersion: 'latest'
-        
-          - task: PublishPipelineArtifact@1
-            inputs:
-             targetPath: terraform/tfplan
-             artifact: tfplan
-          
+                  
           - task: TerraformTaskV4@4
             displayName: Terraform Init
             inputs:
@@ -61,12 +56,18 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'plan'
+              commandOptions: '-out=tfplan'
               workingDirectory: '$(WORKING_DIRECTORY)'
               environmentServiceNameAzureRM: 'service-connection-subscription'
             env:
              TF_VAR_email_address : $(email_address)
              TF_VAR_hosted_zone_name : $(hosted_zone_name)  
 
+          - task: PublishPipelineArtifact@1
+            inputs: 
+              targetPath: '$(WORKING_DIRECTORY)/tfplan'
+              artifact: tfplan
+              publishLocation: pipeline
 
   - stage: Apply
     displayName: Apply 
@@ -95,16 +96,16 @@ stages:
           - task: DownloadPipelineArtifact@2
             inputs:
              artifact: tfplan
-             path: terraform/
+             path: '$(WORKING_DIRECTORY)'
 
           - task: TerraformTaskV4@4
             displayName: Terraform Apply
+            environment: production
             inputs:
               provider: 'azurerm'
               command: 'apply'
-              workingDirectory: '$(WORKING_DIRECTORY)'
+              workingDirectory: '$(WORKING_DIRECTORY)/tfplan'
               environmentServiceNameAzureRM: 'service-connection-subscription'
-              args: '-auto-approve'
             env:
              TF_VAR_email_address : $(email_address)
              TF_VAR_hosted_zone_name : $(hosted_zone_name)

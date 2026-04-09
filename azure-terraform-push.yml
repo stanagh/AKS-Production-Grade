@@ -25,7 +25,7 @@ variables:
 stages: 
   - stage: Validate
     jobs: 
-      - job: Validate and plan
+      - job: TerraformPlan
         steps:
           - task: TerraformInstaller@1
             displayName: Install Terraform

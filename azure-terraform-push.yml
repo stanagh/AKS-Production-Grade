@@ -34,8 +34,8 @@ stages:
         
           - task: PublishPipelineArtifact@1
             inputs:
-            targetPath: terraform/tfplan
-            artifact: tfplan
+             targetPath: terraform/tfplan
+             artifact: tfplan
           
           - task: TerraformTaskV4@4
             displayName: Terraform Init

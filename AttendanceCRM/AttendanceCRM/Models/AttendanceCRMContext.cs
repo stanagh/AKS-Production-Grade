@@ -26,7 +26,12 @@ public partial class AttendanceCRMContext : DbContext
     public virtual DbSet<Notification> Notification { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Name=ConnectionStrings:AttendanceCRM");
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseSqlServer("Name=ConnectionStrings:AttendanceCRM");
+        }
+    }
 
     //protected override void OnModelCreating(ModelBuilder modelBuilder)
     //{

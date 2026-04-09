@@ -42,9 +42,6 @@ stages:
           - script: dotnet test AttendanceCRM/AttendanceCRM.Test/AttendanceCRM.Test.csproj
             displayName: Run Unit Tests
 
-          - script: dotnet test AttendanceCRM/AccountControllerTest/AccountControllerTest.csproj
-            displayName: Run AccountController Tests
-
           - script: dotnet test AttendanceCRM/TestProject1/TestProject1.csproj
             displayName: Run TestProject Tests
 

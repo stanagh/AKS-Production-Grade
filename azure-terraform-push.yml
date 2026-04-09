@@ -65,7 +65,7 @@ stages:
 
           - task: PublishPipelineArtifact@1
             inputs: 
-              targetPath: '$(WORKING_DIRECTORY)/tfplan'
+              targetPath: '$(WORKING_DIRECTORY)'
               artifact: tfplan
               publishLocation: pipeline
 
@@ -91,6 +91,7 @@ stages:
                   inputs:
                     provider: 'azurerm'
                     command: 'init'
+                    workingDirectory: '$(WORKING_DIRECTORY)'
                     backendServiceArm: 'service-connection-subscription'
                     backendAzureRmResourceGroupName: 'rg-storage-uksouth'
                     backendAzureRmStorageAccountName: 'storagestatefile001'

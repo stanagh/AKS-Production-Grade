@@ -14,9 +14,9 @@ variables:
   - name: RESOURCE_GROUP
     value: 'rg-prod-uks-aks'
   - name: AKS_CLUSTER_NAME
-    value: 'aks-produksaks'
-  - name: ACR_NAME
     value: 'aks-prod-uks-myapp'
+  - name: ACR_NAME
+    value: 'acrproduksaks'
   - name: IMAGE_NAME
     value: attendancecrm
   - name: IMAGE_TAG

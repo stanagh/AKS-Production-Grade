@@ -74,7 +74,10 @@ stages:
               scriptType: bash
               scriptLocation: inlineScript
               inlineScript: |
+                az aks get-credentials --resource-group $(RESOURCE_GROUP) --name $(AKS_CLUSTER_NAME)
+
                 sed -i "s|REPLACE_TAG|$(IMAGE_TAG)|g" terraform/app/deployment.yml
+                
                 kubectl apply -f terraform/app/deployment.yml -n attendance-crm
                 kubectl apply -f terraform/app/service.yml -n attendance-crm
                 kubectl apply -f terraform/app/ingress.yml -n attendance-crm

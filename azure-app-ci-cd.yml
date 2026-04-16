@@ -90,6 +90,8 @@ stages:
         displayName: Verify Deployment
         steps:
           - script: |
+              az aks get-credentials --resource-group $(RESOURCE_GROUP) --name $(AKS_CLUSTER_NAME) --overwrite-existing
+
               kubectl get pods -n attendance-crm 
               kubectl get svc -n attendance-crm
               kubectl get ingress -n attendance-crm

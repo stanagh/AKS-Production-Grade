@@ -69,6 +69,22 @@ stages:
               artifact: tfplan
               publishLocation: pipeline
 
+  - stage: Security
+    displayName: Security Scan
+    dependsOn: Validate
+    condition: succeeded()
+    jobs:
+      - job: CheckovScan
+        displayName: Checkov Terraform Scan
+        steps:
+          - script: |
+              pip install checkov
+              checkov -d $(WORKING_DIRECTORY) \
+                --soft-fail \
+                --output cli
+            displayName: Scan Terraform with Checkov
+            continueOnError: true  
+
   - stage: Apply 
     displayName: Apply 
     dependsOn: Validate

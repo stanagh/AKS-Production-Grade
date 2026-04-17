@@ -76,6 +76,7 @@ stages:
     jobs: 
       - job: Apply
         steps:
+          - checkout: self
           - task: TerraformInstaller@1
             displayName: Install Terraform
             inputs:
@@ -103,7 +104,8 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'apply'
-              workingDirectory: '$(WORKING_DIRECTORY)/tfplan'
+              workingDirectory: '$(WORKING_DIRECTORY)'
+              commandOptions: '-input=false tfplan' 
               environmentServiceNameAzureRM: 'service-connection-subscription'
             env:
              TF_VAR_email_address : $(email_address)

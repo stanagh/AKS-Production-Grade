@@ -209,6 +209,11 @@ module "alert_rule" {
   log_analytics_workspace_id = module.log.log_analytics_workspace_id
   app_insights_id            = module.appi.id
   tags                       = local.tags
+
+    depends_on = [
+    module.log,
+    module.appi
+  ]
 }
 
 module "aks" {

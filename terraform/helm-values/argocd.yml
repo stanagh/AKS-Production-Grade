@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/yourusername/demo-k8s-app.git
     targetRevision: main
-    path: k8s ## Path to the Kubernetes manifests in the repository
+    path: k8s 
   destination:
     server: https://kubernetes.default.svc
     namespace: default
@@ -17,4 +17,4 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
-      - CreateNamespace=true # Automatically create the namespace if it doesn't exist (to be completed)
+      - CreateNamespace=true

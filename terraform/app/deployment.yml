@@ -15,9 +15,7 @@ spec:
       labels:
         app: attendancecrm
     spec:
-      securityContext:
-        runAsUser: 0
-      serviceAccountName: attendance-crm
+      serviceAccountName: attendance-crm  
       containers:
         - name: attendancecrm-container
           image: acrproduksaks.azurecr.io/attendancecrm:REPLACE_TAG

@@ -101,7 +101,7 @@ resource "kubernetes_secret" "attendance_crm" {
     namespace = "attendance-crm"
   }
   data = {
-     "ConnectionStrings__AttendanceCRM"     = "data source=${module.sql.sql_server_fqdn};initial catalog=${module.sql.sql_database_name};user id=${module.sql.sql_server_admin_login};password=${random_password.sql_server_admin_password.result};TrustServerCertificate=True;"
+    "ConnectionStrings__AttendanceCRM"      = "data source=${module.sql.sql_server_fqdn};initial catalog=${module.sql.sql_database_name};user id=${module.sql.sql_server_admin_login};password=${random_password.sql_server_admin_password.result};TrustServerCertificate=True;"
     "APPLICATIONINSIGHTS_CONNECTION_STRING" = module.appi.connection_string
   }
 }

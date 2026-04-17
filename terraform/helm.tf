@@ -2,7 +2,7 @@ resource "helm_release" "ingress" {
   name             = "ingress-nginx"
   repository       = "https://kubernetes.github.io/ingress-nginx"
   chart            = "ingress-nginx"
-  version          = "4.15.0"
+  version          = "4.12.8"
   namespace        = kubernetes_namespace.ingress_nginx.metadata[0].name
   create_namespace = false
   values = [
@@ -15,7 +15,7 @@ resource "helm_release" "cert_manager" {
   name             = "cert-manager"
   repository       = "https://charts.jetstack.io"
   chart            = "cert-manager"
-  version          = "1.20.0"
+  version          = "v1.17.2"
   namespace        = kubernetes_namespace.cert_manager.metadata[0].name
   create_namespace = false
   values = [
@@ -28,7 +28,7 @@ resource "helm_release" "external_dns" {
   name             = "external-dns"
   repository       = "https://kubernetes-sigs.github.io/external-dns"
   chart            = "external-dns"
-  version          = "1.20.0"
+  version          = "1.15.2"
   namespace        = kubernetes_namespace.external_dns.metadata[0].name
   create_namespace = false
   timeout          = 600

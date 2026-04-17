@@ -10,5 +10,5 @@ spec:
     app: attendancecrm
   ports:
     - protocol: TCP
-      port: 80        # Service port
-      targetPort: 8080  # Container port
+      port: 80        
+      targetPort: 8080  

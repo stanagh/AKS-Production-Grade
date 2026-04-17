@@ -29,7 +29,7 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "aks_high_cpu" {
       | where AvgCPU > 90
     QUERY
     time_aggregation_method = "Average"
-    metric_measure_column = "AvgCPU"
+    metric_measure_column   = "AvgCPU"
     threshold               = 0
     operator                = "GreaterThan"
   }
@@ -61,7 +61,7 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "aks_high_memory" {
       | where AvgMemory > 85
     QUERY
     time_aggregation_method = "Average"
-    metric_measure_column = "AvgMemory"
+    metric_measure_column   = "AvgMemory"
     threshold               = 0
     operator                = "GreaterThan"
   }
@@ -91,7 +91,7 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "pod_restarts" {
       | summarize RestartCount = sum(PodRestartCount) by bin(TimeGenerated, 5m)
     QUERY
     time_aggregation_method = "Total"
-    metric_measure_column = "RestartCount"
+    metric_measure_column   = "RestartCount"
     threshold               = 0
     operator                = "GreaterThan"
   }

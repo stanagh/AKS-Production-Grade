@@ -1,0 +1,107 @@
+trigger: none  # manual trigger only - you never want auto destroy
+
+pr: none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  - group: terraform-secrets
+  - name: WORKING_DIRECTORY
+    value: terraform/
+
+stages:
+  - stage: Validate
+    displayName: Validate Destroy Plan
+    jobs:
+      - job: TerraformDestroyPlan
+        steps:
+          - task: TerraformInstaller@1
+            displayName: Install Terraform
+            inputs:
+              terraformVersion: 'latest'
+
+          - task: TerraformTaskV4@4
+            displayName: Terraform Init
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              workingDirectory: '$(WORKING_DIRECTORY)'
+              backendServiceArm: 'service-connection-subscription'
+              backendAzureRmResourceGroupName: 'rg-storage-uksouth'
+              backendAzureRmStorageAccountName: 'storagestatefile001'
+              backendAzureRmContainerName: 'tfstate'
+              backendAzureRmKey: 'terraform.aksstate'
+
+          - task: TerraformTaskV4@4
+            displayName: Terraform Destroy Plan
+            inputs:
+              provider: 'azurerm'
+              command: 'plan'
+              commandOptions: '-destroy -out=tfdestroyplan'
+              workingDirectory: '$(WORKING_DIRECTORY)'
+              environmentServiceNameAzureRM: 'service-connection-subscription'
+            env:
+              TF_VAR_email_address: $(email_address)
+              TF_VAR_hosted_zone_name: $(hosted_zone_name)
+
+          - task: PublishPipelineArtifact@1
+            inputs:
+              targetPath: '$(WORKING_DIRECTORY)/tfdestroyplan'
+              artifact: tfdestroyplan
+              publishLocation: pipeline
+
+  - stage: Destroy
+    displayName: Terraform Destroy
+    dependsOn: Validate
+    condition: succeeded()
+    jobs:
+      - deployment: TerraformDestroy
+        displayName: Terraform Destroy
+        environment: production  # reuses your existing approval gate
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: self
+
+                - task: TerraformInstaller@1
+                  displayName: Install Terraform
+                  inputs:
+                    terraformVersion: 'latest'
+
+                - task: TerraformTaskV4@4
+                  displayName: Terraform Init
+                  inputs:
+                    provider: 'azurerm'
+                    command: 'init'
+                    workingDirectory: '$(WORKING_DIRECTORY)'
+                    backendServiceArm: 'service-connection-subscription'
+                    backendAzureRmResourceGroupName: 'rg-storage-uksouth'
+                    backendAzureRmStorageAccountName: 'storagestatefile001'
+                    backendAzureRmContainerName: 'tfstate'
+                    backendAzureRmKey: 'terraform.aksstate'
+
+                - task: DownloadPipelineArtifact@2
+                  inputs:
+                    artifact: tfdestroyplan
+                    path: '$(WORKING_DIRECTORY)'
+
+                - task: TerraformTaskV4@4
+                  displayName: Terraform Destroy
+                  inputs:
+                    provider: 'azurerm'
+                    command: 'apply'
+                    workingDirectory: '$(WORKING_DIRECTORY)'
+                    commandOptions: '-input=false tfdestroyplan'
+                    environmentServiceNameAzureRM: 'service-connection-subscription'
+                  env:
+                    TF_VAR_email_address: $(email_address)
+                    TF_VAR_hosted_zone_name: $(hosted_zone_name)
+
+                - script: |
+                    curl -X POST $(SLACK_WEBHOOK_URL) \
+                    -H 'Content-type: application/json' \
+                    --data "{
+                    \"text\": \"*Terraform Destroy Completed*\n Status: ✅ Success\n Branch: $(Build.SourceBranchName)\n Build: $(Build.BuildId)\"}"
+                  displayName: Notify Slack

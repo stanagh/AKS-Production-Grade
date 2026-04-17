@@ -58,7 +58,7 @@ stages:
     jobs:
       - deployment: TerraformDestroy
         displayName: Terraform Destroy
-        environment: production  # reuses your existing approval gate
+        environment: production
         strategy:
           runOnce:
             deploy:

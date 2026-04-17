@@ -89,14 +89,21 @@ stages:
       - job: VerifyAKSDeployment
         displayName: Verify Deployment
         steps:
-          - script: |
+        - checkout: self
+        - task: AzureCLI@2
+          displayName: Verify AKS Deployment
+          inputs:
+            azureSubscription: service-connection-subscription
+            scriptType: bash
+            scriptLocation: inlineScript
+            inlineScript: |
               az aks get-credentials --resource-group $(RESOURCE_GROUP) --name $(AKS_CLUSTER_NAME) --overwrite-existing
-              kubectl get pods -n attendance-crm 
+              kubectl get pods -n attendance-crm
               kubectl get svc -n attendance-crm
               kubectl get ingress -n attendance-crm
               kubectl get pods -n monitoring
               kubectl rollout status deployment/attendancecrm-deployment -n attendance-crm
-
+              
   - stage: Notify
     dependsOn: Review
     condition: always() 

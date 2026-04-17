@@ -60,6 +60,32 @@ stages:
                 docker build -t $(ACR_NAME).azurecr.io/$(IMAGE_NAME):$(IMAGE_TAG) ./AttendanceCRM
                 docker push $(ACR_NAME).azurecr.io/$(IMAGE_NAME):$(IMAGE_TAG)
             displayName: Build and Push to ACR
+  
+  - stage: Security
+    displayName: Security Scan
+    dependsOn: Build
+    condition: succeeded()
+    jobs:
+      - job: TrivyScan
+        displayName: Trivy Image Scan
+        steps:
+          - task: AzureCLI@2
+            displayName: Scan Image with Trivy
+            continueOnError: true  
+            inputs:
+              azureSubscription: service-connection-subscription
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+
+                az acr login --name acrproduksaks
+
+                trivy image \
+                  --exit-code 0 \
+                  --severity LOW,MEDIUM,HIGH,CRITICAL \
+                  --format table \
+                  $(ACR_NAME).azurecr.io/attendancecrm:$(IMAGE_TAG)
 
   - stage: Deploy
     dependsOn: Build

@@ -87,7 +87,7 @@ stages:
 
   - stage: Apply 
     displayName: Apply 
-    dependsOn: Validate
+    dependsOn: Security
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
     jobs: 
       - deployment: TerraformApply

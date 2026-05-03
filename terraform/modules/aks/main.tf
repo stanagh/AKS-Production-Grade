@@ -19,27 +19,27 @@ resource "azurerm_kubernetes_cluster" "aks_cluster" {
   workload_identity_enabled = true
   oidc_issuer_enabled       = true
 
-  key_vault_secrets_provider { # ← add this
+  key_vault_secrets_provider { 
     secret_rotation_enabled  = true
     secret_rotation_interval = "2m"
   }
 }
 
-# resource "azurerm_monitor_diagnostic_setting" "aks" {
-#   name                       = var.aks_diagnostic_setting_name
-#   target_resource_id         = azurerm_kubernetes_cluster.aks_cluster.id
-#   log_analytics_workspace_id = var.log_analytics_workspace_id
+resource "azurerm_monitor_diagnostic_setting" "aks" {
+  name                       = var.aks_diagnostic_setting_name
+  target_resource_id         = azurerm_kubernetes_cluster.aks_cluster.id
+  log_analytics_workspace_id = var.log_analytics_workspace_id
 
-#   dynamic "enabled_log" {
-#     for_each = local.aks_log_categories
-#     content {
-#       category = enabled_log.value
-#     }
-#   }
+  dynamic "enabled_log" {
+    for_each = local.aks_log_categories
+    content {
+      category = enabled_log.value
+    }
+  }
 
-#   metric {
-#     category = "AllMetrics"
-#     enabled  = true
-#   }
-# }
+  metric {
+    category = "AllMetrics"
+    enabled  = true
+  }
+}
 

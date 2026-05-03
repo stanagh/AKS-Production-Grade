@@ -32,3 +32,8 @@ variable "snet_address_prefixes" {
   default     = ["10.1.1.0/24"]
 }
 
+variable "service_endpoints" {
+  description = "The service endpoints to enable on the subnet."
+  type        = list(string)
+  default     = ["Microsoft.Sql", "Microsoft.KeyVault"]
+}

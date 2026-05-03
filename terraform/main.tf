@@ -8,7 +8,6 @@ data "http" "my_public_ip" {
   url = "https://icanhazip.com"
 }
 
-
 resource "random_password" "grafana_admin_password" {
   length  = 16
   special = true
@@ -41,13 +40,6 @@ module "vnet" {
   location            = data.azurerm_resource_group.rg.location
   subnet_name         = "snet-${local.environment}-${local.location}-${local.platform}-aks"
 }
-
-# module "role_assignment" {
-#   source              = "./modules/role_assignment"
-#   role_definition_name = "AcrPull"
-#   principal_id         = module.aks.kubelet_identity_object_id
-#   scope                = module.acr.acr_id
-# }
 
 module "dns" {
   source              = "./modules/dns"
@@ -173,11 +165,12 @@ module "sql" {
   source                        = "./modules/sql"
   sql_server_name               = "sql-${local.environment}-${local.location}-${local.platform}"
   sql_server_admin_password     = random_password.sql_server_admin_password.result
-  my_personal_ip = var.personal_ip_address != "" ? var.personal_ip_address : trimspace(data.http.my_public_ip.response_body)
+  my_personal_ip                = var.personal_ip_address != "" ? var.personal_ip_address : trimspace(data.http.my_public_ip.response_body)
   azure_administrator_object_id = data.azurerm_client_config.current.object_id
   resource_group_name           = data.azurerm_resource_group.rg.name
   location                      = data.azurerm_resource_group.rg.location
   tags                          = local.tags
+  aks_subnet_id                 = module.vnet.subnet_id
 
 }
 

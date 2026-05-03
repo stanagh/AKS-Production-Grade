@@ -34,6 +34,12 @@ resource "azurerm_mssql_database" "sql_database" {
   }
 }
 
+resource "azurerm_mssql_virtual_network_rule" "aks_vnet_rule" {
+  name      = "allow-aks-subnet"
+  server_id = azurerm_mssql_server.sql_server.id
+  subnet_id = var.aks_subnet_id
+}
+
 resource "azurerm_mssql_firewall_rule" "allow_local_machine" {
   name             = "AllowLocalMachine"
   server_id        = azurerm_mssql_server.sql_server.id

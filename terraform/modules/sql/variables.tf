@@ -94,5 +94,10 @@ variable "end_ip_address" {
 variable "my_personal_ip" {
   description = "Your personal IP address to allow access to the SQL Server."
   type        = string
-   
+
+}
+
+variable "aks_subnet_id" {
+  description = "The ID of the AKS subnet to allow access to the SQL Server."
+  type        = string
 }

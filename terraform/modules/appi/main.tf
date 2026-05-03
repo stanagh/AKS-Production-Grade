@@ -18,15 +18,15 @@ resource "azurerm_application_insights_standard_web_test" "availability_test" {
   geo_locations           = var.geo_locations
 
   request {
-    url = var.availability_url
-    parse_dependent_requests_enabled = false 
+    url                              = var.availability_url
+    parse_dependent_requests_enabled = false
 
   }
 
   validation_rules {
-    expected_status_code = var.expected_http_status_code
-    ssl_check_enabled     = true 
-    ssl_cert_remaining_lifetime  = 7
+    expected_status_code        = var.expected_http_status_code
+    ssl_check_enabled           = true
+    ssl_cert_remaining_lifetime = 7
   }
 
   tags = var.tags

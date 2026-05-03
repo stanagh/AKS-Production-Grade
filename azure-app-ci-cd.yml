@@ -101,10 +101,11 @@ stages:
               scriptType: bash
               scriptLocation: inlineScript
               inlineScript: |
-                git config user.email "ado@pipeline.com"
+                git config user.email "staghara@icloud.com"
                 git config user.name "ADO Pipeline"
                 
-                git checkout main
+                git fetch origin main
+                git checkout -B main origin/main 
 
                 sed -i "s|attendancecrm:.*|attendancecrm:$(IMAGE_TAG)|g" terraform/app/deployment.yml
                 

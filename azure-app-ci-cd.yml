@@ -88,26 +88,27 @@ stages:
                   $(ACR_NAME).azurecr.io/attendancecrm:$(IMAGE_TAG)
 
   - stage: Deploy
-    dependsOn: Build
+    dependsOn: Security
     jobs:
-      - job: DeployToAKS
+      - job: UpdateImageTag
         steps:
           - checkout: self
+            persistCredentials: true 
           - task: AzureCLI@2
-            displayName: Deploy to AKS
+            displayName: Update Image Tag in Git
             inputs:
               azureSubscription: service-connection-subscription
               scriptType: bash
               scriptLocation: inlineScript
               inlineScript: |
-                az aks get-credentials --resource-group $(RESOURCE_GROUP) --name $(AKS_CLUSTER_NAME)
-
-                sed -i "s|REPLACE_TAG|$(IMAGE_TAG)|g" terraform/app/deployment.yml
+                git config user.email "ado@pipeline.com"
+                git config user.name "ADO Pipeline"
                 
-                kubectl apply -f terraform/app/deployment.yml -n attendance-crm
-                kubectl apply -f terraform/app/service.yml -n attendance-crm
-                kubectl apply -f terraform/app/ingress.yml -n attendance-crm
-                kubectl rollout status deployment/attendancecrm-deployment -n attendance-crm
+                sed -i "s|attendancecrm:.*|attendancecrm:$(IMAGE_TAG)|g" terraform/app/deployment.yml
+                
+                git add terraform/app/deployment.yml
+                git commit -m "ci: update image tag to $(IMAGE_TAG) [skip ci]"
+                git push origin main
   
   - stage: Review
     dependsOn: Deploy

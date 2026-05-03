@@ -132,6 +132,7 @@ stages:
                   env:
                     TF_VAR_email_address: $(email_address)
                     TF_VAR_hosted_zone_name: $(hosted_zone_name)
+                    TF_VAR_personal_ip_address: $(personal_ip_address)
                 
                 - script: | 
                     curl -X POST $(SLACK_WEBHOOK_URL) \

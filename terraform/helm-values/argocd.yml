@@ -1,17 +1,20 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: demo-app
+  name: attendance-crm
   namespace: argocd
 spec:
   project: default
-  source:
-    repoURL: https://github.com/yourusername/demo-k8s-app.git
-    targetRevision: main
-    path: k8s 
+  sources:
+    - repoURL: https://github.com/stanagh/AKS-Production-Grade.git
+      targetRevision: main
+      path: terraform/app
+    - repoURL: https://github.com/stanagh/AKS-Production-Grade.git
+      targetRevision: main
+      path: terraform/k8s
   destination:
     server: https://kubernetes.default.svc
-    namespace: default
+    namespace: attendance-crm
   syncPolicy:
     automated:
       prune: true

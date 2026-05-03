@@ -4,6 +4,11 @@ data "azurerm_resource_group" "rg" {
   name = local.rg_name
 }
 
+data "http" "my_public_ip" {
+  url = "https://icanhazip.com"
+}
+
+
 resource "random_password" "grafana_admin_password" {
   length  = 16
   special = true
@@ -168,10 +173,12 @@ module "sql" {
   source                        = "./modules/sql"
   sql_server_name               = "sql-${local.environment}-${local.location}-${local.platform}"
   sql_server_admin_password     = random_password.sql_server_admin_password.result
+  my_personal_ip                = var.personal_ip_address != "" ? var.personal_ip_address : data.http.my_public_ip.body
   azure_administrator_object_id = data.azurerm_client_config.current.object_id
   resource_group_name           = data.azurerm_resource_group.rg.name
   location                      = data.azurerm_resource_group.rg.location
   tags                          = local.tags
+
 }
 
 module "acr" {
@@ -210,7 +217,7 @@ module "alert_rule" {
   app_insights_id            = module.appi.id
   tags                       = local.tags
 
-    depends_on = [
+  depends_on = [
     module.log,
     module.appi
   ]

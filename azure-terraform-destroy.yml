@@ -1,4 +1,4 @@
-trigger: none  # manual trigger only - you never want auto destroy
+trigger: none  # manual trigger only - never want auto destroy!
 
 pr: none
 

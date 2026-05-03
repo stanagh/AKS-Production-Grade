@@ -104,6 +104,8 @@ stages:
                 git config user.email "ado@pipeline.com"
                 git config user.name "ADO Pipeline"
                 
+                git checkout main
+
                 sed -i "s|attendancecrm:.*|attendancecrm:$(IMAGE_TAG)|g" terraform/app/deployment.yml
                 
                 git add terraform/app/deployment.yml

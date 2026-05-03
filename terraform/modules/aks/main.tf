@@ -16,11 +16,6 @@ resource "azurerm_kubernetes_cluster" "aks_cluster" {
     vnet_subnet_id = var.subnet_id
   }
 
-   network_profile {
-    network_plugin = "azure"
-    network_policy = "azure"
-  }
-
   identity {
     type = var.identity_type
   }

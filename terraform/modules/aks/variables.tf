@@ -63,3 +63,15 @@ variable "log_analytics_workspace_id" {
   description = "The ID of the Log Analytics workspace to which AKS diagnostics will be sent."
   type        = string
 }
+
+variable "min_count" {
+  description = "The minimum number of nodes in the default node pool when auto-scaling is enabled."
+  type        = number
+  default     = 1
+}
+
+variable "max_count" {
+  description = "The maximum number of nodes in the default node pool when auto-scaling is enabled."
+  type        = number
+  default     = 3
+}

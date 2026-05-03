@@ -90,3 +90,9 @@ variable "end_ip_address" {
   type        = string
   default     = "0.0.0.0"
 }
+
+variable "my_personal_ip" {
+  description = "Your personal IP address to allow access to the SQL Server."
+  type        = string
+   
+}

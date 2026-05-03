@@ -41,6 +41,13 @@ resource "azurerm_mssql_firewall_rule" "allow_local_machine" {
   end_ip_address   = local.my_public_ip
 }
 
+resource "azurerm_mssql_firewall_rule" "allow_my_ip" {
+  name             = "AllowMyPersonalIP"
+  server_id        = azurerm_mssql_server.sql_server.id
+  start_ip_address = var.my_personal_ip
+  end_ip_address   = var.my_personal_ip
+}
+
 resource "azurerm_mssql_firewall_rule" "allow_azure" {
   name             = "AllowAllAzureServices"
   server_id        = azurerm_mssql_server.sql_server.id

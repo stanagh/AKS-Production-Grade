@@ -173,7 +173,7 @@ module "sql" {
   source                        = "./modules/sql"
   sql_server_name               = "sql-${local.environment}-${local.location}-${local.platform}"
   sql_server_admin_password     = random_password.sql_server_admin_password.result
-  my_personal_ip                = var.personal_ip_address != "" ? var.personal_ip_address : data.http.my_public_ip.body
+  my_personal_ip = var.personal_ip_address != "" ? var.personal_ip_address : trimspace(data.http.my_public_ip.response_body)
   azure_administrator_object_id = data.azurerm_client_config.current.object_id
   resource_group_name           = data.azurerm_resource_group.rg.name
   location                      = data.azurerm_resource_group.rg.location

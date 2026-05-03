@@ -18,7 +18,7 @@ spec:
       serviceAccountName: attendance-crm  
       containers:
         - name: attendancecrm-container
-          image: acrproduksaks.azurecr.io/attendancecrm:REPLACE_TAG
+          image: acrproduksaks.azurecr.io/attendancecrm:154
           ports:
             - containerPort: 8080
           resources:

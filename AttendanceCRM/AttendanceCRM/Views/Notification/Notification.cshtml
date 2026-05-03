@@ -49,8 +49,8 @@
                 "lengthMenu": "_MENU_",
                 "emptyTable": "No data available",
                 paginate: {
-                    next: '<img src="@Url.Content("~/Images/icon-next.svg")" alt="">', // or '→'
-                    previous: '<img src="@Url.Content("~/Images/icon-prev.svg")" alt="">' // or '←'
+                    next: '<img src="@Url.Content("~/images/icon-next.svg")" alt="">', // or '→'
+                    previous: '<img src="@Url.Content("~/images/icon-prev.svg")" alt="">' // or '←'
                 },
                 "info": "Records per page from <span class=\"badge badge-pill badge-dark\"> _TOTAL_ </span>",
             },
@@ -65,7 +65,7 @@
                     "data": null,
                     "class": "text-center",
                     "render": function (data, type, row) {
-                        var appendstring = '<a onclick="Acknowledge(\'' + row["EncryptedId"] + '\')" class="action-btn block" title="Acknowledge"><img src="@Url.Content("~/Images/icon-acknowledge.svg")" alt=""></a>'
+                        var appendstring = '<a onclick="Acknowledge(\'' + row["EncryptedId"] + '\')" class="action-btn block" title="Acknowledge"><img src="@Url.Content("~/images/icon-acknowledge.svg")" alt=""></a>'
                         return appendstring;
                     },
                     "orderable": false,

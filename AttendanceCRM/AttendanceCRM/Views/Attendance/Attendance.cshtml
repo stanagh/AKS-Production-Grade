@@ -16,7 +16,7 @@
                         <div class="input-group">
                             @Html.TextBox("Search", "", new { @class = "form-control", placeholder = "Search by Name/Detail", maxlength = "100", autocomplete = "off" })
                             <div class="input-group-append">
-                                <button id="btnSearch" type="button" class="input-group-text btn btn-primary" onclick="BindTable()"><img src="@Url.Content("~/Images/icon-search.svg")" alt=""></button>
+                                <button id="btnSearch" type="button" class="input-group-text btn btn-primary" onclick="BindTable()"><img src="@Url.Content("~/images/icon-search.svg")" alt=""></button>
                             </div>
                         </div>
                     </div>
@@ -63,8 +63,8 @@
                 "lengthMenu": "_MENU_",
                 "emptyTable": "No data available",
                 paginate: {
-                    next: '<img src="@Url.Content("~/Images/icon-next.svg")" alt="">', // or '→'
-                    previous: '<img src="@Url.Content("~/Images/icon-prev.svg")" alt="">' // or '←'
+                    next: '<img src="@Url.Content("~/images/icon-next.svg")" alt="">', // or '→'
+                    previous: '<img src="@Url.Content("~/images/icon-prev.svg")" alt="">' // or '←'
                 },
                 "info": "Records per page from <span class=\"badge badge-pill badge-dark\"> _TOTAL_ </span>",
             },
@@ -98,7 +98,7 @@
                     "class": "text-center",
                     "render": function (data, type, row) {
                         var appendstring = '';
-                        appendstring += '<a href="@Url.Action("manageattendance", "attendance")?data=' + row["EncryptedId"] + '"  class="action-btn"  title="Edit"><img src="@Url.Content("~/Images/icon-edit.svg")" alt=""></a>'
+                        appendstring += '<a href="@Url.Action("manageattendance", "attendance")?data=' + row["EncryptedId"] + '"  class="action-btn"  title="Edit"><img src="@Url.Content("~/images/icon-edit.svg")" alt=""></a>'
                         return appendstring;
                     },
                     "orderable": false,

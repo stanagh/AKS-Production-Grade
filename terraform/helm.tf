@@ -106,8 +106,8 @@ resource "helm_release" "argocd" {
   version          = "9.4.10"
   namespace        = kubernetes_namespace.argocd.metadata[0].name
   create_namespace = false
-  values = [
-    file("./helm-values/argocd.yml")
-  ]
+  # values = [
+  #   file("./helm-values/argocd.yml")
+  # ]
   depends_on = [module.aks, helm_release.ingress]
 }

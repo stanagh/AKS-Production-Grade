@@ -105,3 +105,16 @@ resource "kubernetes_secret" "attendance_crm" {
     "APPLICATIONINSIGHTS_CONNECTION_STRING" = module.appi.connection_string
   }
 }
+
+resource "kubectl_manifest" "argocd_application" {
+  yaml_body = file("${path.module}/argocd/application.yml")
+
+  force_conflicts   = true
+  server_side_apply = true
+
+  depends_on = [
+    helm_release.argocd,
+    kubectl_manifest.app_service_account,
+    kubectl_manifest.app_secret_provider
+  ]
+}

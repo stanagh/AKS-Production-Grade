@@ -5,6 +5,7 @@ resource "azurerm_kubernetes_cluster" "aks_cluster" {
   dns_prefix                        = var.dns_prefix
   tags                              = var.tags
   role_based_access_control_enabled = var.role_based_access_control_enabled
+  
 
   default_node_pool {
     name           = "default"
@@ -25,6 +26,10 @@ resource "azurerm_kubernetes_cluster" "aks_cluster" {
   key_vault_secrets_provider { 
     secret_rotation_enabled  = true
     secret_rotation_interval = "2m"
+  }
+
+  oms_agent {
+    log_analytics_workspace_id = var.log_analytics_workspace_id
   }
 }
 

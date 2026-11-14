@@ -20,17 +20,19 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "aks_high_cpu" {
   severity             = 2
   enabled              = true
 
-  criteria {
+    criteria {
     query                   = <<-QUERY
       Perf
       | where ObjectName == "K8SNode"
-      | where CounterName == "cpuUsageNanoCores"
-      | summarize AvgCPU = avg(CounterValue) by bin(TimeGenerated, 5m)
-      | where AvgCPU > 90
+      | where CounterName in ("cpuUsageNanoCores", "cpuCapacityNanoCores")
+      | summarize Usage = avgif(CounterValue, CounterName == "cpuUsageNanoCores"),
+                  Capacity = maxif(CounterValue, CounterName == "cpuCapacityNanoCores")
+                  by Computer, bin(TimeGenerated, 5m)
+      | extend AvgCPU = Usage * 100.0 / Capacity
     QUERY
     time_aggregation_method = "Average"
     metric_measure_column   = "AvgCPU"
-    threshold               = 0
+    threshold               = 90
     operator                = "GreaterThan"
   }
 
@@ -56,13 +58,15 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "aks_high_memory" {
     query                   = <<-QUERY
       Perf
       | where ObjectName == "K8SNode"
-      | where CounterName == "memoryRssBytes"
-      | summarize AvgMemory = avg(CounterValue) by bin(TimeGenerated, 5m)
-      | where AvgMemory > 85
+      | where CounterName in ("memoryRssBytes", "memoryCapacityBytes")
+      | summarize Usage = avgif(CounterValue, CounterName == "memoryRssBytes"),
+                  Capacity = maxif(CounterValue, CounterName == "memoryCapacityBytes")
+                  by Computer, bin(TimeGenerated, 5m)
+      | extend AvgMemory = Usage * 100.0 / Capacity
     QUERY
     time_aggregation_method = "Average"
     metric_measure_column   = "AvgMemory"
-    threshold               = 0
+    threshold               = 85
     operator                = "GreaterThan"
   }
 
@@ -87,12 +91,12 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "pod_restarts" {
   criteria {
     query                   = <<-QUERY
       KubePodInventory
-      | where PodRestartCount > 5
-      | summarize RestartCount = sum(PodRestartCount) by bin(TimeGenerated, 5m)
+      | summarize Restarts = max(PodRestartCount) - min(PodRestartCount) by Name
+      | summarize RestartCount = sum(Restarts)
     QUERY
     time_aggregation_method = "Total"
     metric_measure_column   = "RestartCount"
-    threshold               = 0
+    threshold               = 3
     operator                = "GreaterThan"
   }
 

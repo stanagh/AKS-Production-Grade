@@ -21,10 +21,6 @@ The application is publicly accessible via HTTPS with certificates issued automa
 | Security scanning | Checkov (Terraform code), Trivy (container image) |
 
 ## Architecture
-<img width="1280" height="698" alt="chrome-capture-2026-11-15" src="https://github.com/user-attachments/assets/eabb9f6a-4583-4c7a-993c-9163415221f2" />
-
-<img width="1280" height="698" alt="chrome-capture-2026-11-15" src="https://github.com/user-attachments/assets/9e1c3820-bfd2-488a-8f03-8836f1bab348" />
-
 ![hippo](https://github.com/user-attachments/assets/eabb9f6a-4583-4c7a-993c-9163415221f2)
 
 

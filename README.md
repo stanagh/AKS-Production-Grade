@@ -177,8 +177,9 @@ Browse to `http://localhost:5262/`. The app expects the AttendanceCRM database s
 
 The common thread: most of these only appeared on a clean rebuild, which is why the destroy pipeline turned out to be the best test I had.
 
-## Video 🍿
-https://www.loom.com/share/d3ef2a85260d4e3383c8acf60ec7ec80
+## Demo 🍿
+
+https://github.com/user-attachments/assets/8ba512ba-d741-4ef3-8a90-3c6734dd30ab
 
 ## Live application 🌍
 

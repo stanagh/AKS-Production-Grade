@@ -21,10 +21,6 @@ The application is publicly accessible via HTTPS with certificates issued automa
 | Security scanning | Checkov (Terraform code), Trivy (container image) |
 
 ## Architecture
-<img width="1280" height="698" alt="chrome-capture-2026-11-15" src="https://github.com/user-attachments/assets/eabb9f6a-4583-4c7a-993c-9163415221f2" />
-
-<img width="1280" height="698" alt="chrome-capture-2026-11-15" src="https://github-production-user-asset-6210df.s3.amazonaws.com/72015074/706823998-0eca6602-3574-401c-a092-c45b2b186ad9.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20261115%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261115T133759Z&X-Amz-Expires=300&X-Amz-Signature=3fbed2df9ddc48330ad96b7643d70f7fc5071536efb79ea4a63419aa73a74e80&X-Amz-SignedHeaders=host&response-content-type=image%2Fgif" />
-
 ![Image](https://github-production-user-asset-6210df.s3.amazonaws.com/72015074/706823998-0eca6602-3574-401c-a092-c45b2b186ad9.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20261115%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261115T133759Z&X-Amz-Expires=300&X-Amz-Signature=3fbed2df9ddc48330ad96b7643d70f7fc5071536efb79ea4a63419aa73a74e80&X-Amz-SignedHeaders=host&response-content-type=image%2Fgif)
 
 

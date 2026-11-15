@@ -21,7 +21,11 @@ The application is publicly accessible via HTTPS with certificates issued automa
 | Security scanning | Checkov (Terraform code), Trivy (container image) |
 
 ## Architecture
-![hippo](https://github.com/user-attachments/assets/eabb9f6a-4583-4c7a-993c-9163415221f2)
+![AKS Platform Architecture](https://github.com/user-attachments/assets/eabb9f6a-4583-4c7a-993c-9163415221f2)
+
+## Demo 🍿
+
+https://github.com/user-attachments/assets/8ba512ba-d741-4ef3-8a90-3c6734dd30ab
 
 
 
@@ -177,9 +181,7 @@ Browse to `http://localhost:5262/`. The app expects the AttendanceCRM database s
 
 The common thread: most of these only appeared on a clean rebuild, which is why the destroy pipeline turned out to be the best test I had.
 
-## Demo 🍿
 
-https://github.com/user-attachments/assets/8ba512ba-d741-4ef3-8a90-3c6734dd30ab
 
 ## Live application 🌍
 
